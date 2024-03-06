@@ -25,6 +25,11 @@ const router = createRouter({
           component: () => import('../views/FormClient.vue')
         },
         {
+          path: '/update-client/:id',
+          name: 'update-client',
+          component: () => import('../views/FormClient.vue')
+        },
+        {
           path: '/products',
           name: 'products-view',
           component: () => import('../views/ProductsView.vue')
@@ -32,6 +37,11 @@ const router = createRouter({
         {
           path: '/new-product',
           name: 'new-product',
+          component: () => import('../views/FormProduct.vue')
+        },
+        {
+          path: '/update-product/:id',
+          name: 'update-product',
           component: () => import('../views/FormProduct.vue')
         },
         {
