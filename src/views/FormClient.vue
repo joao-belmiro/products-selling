@@ -38,7 +38,7 @@
           </div>
           <div class="input-group">
             <label> {{ active ? 'Ativo' : 'Inativo' }} </label>
-            <input v-model="active" type="checkbox" required />
+            <input v-model="active" type="checkbox" />
           </div>
         </div>
       </Form>
