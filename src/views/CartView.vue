@@ -8,27 +8,61 @@
       placeholder="Digite o nome do cliente"
       @emitSearch="onSearch"
     ></HeaderOptions>
-    <Table :columns="columns" :data="data" id="nome"></Table>
+    <Table
+      :columns="columns"
+      :data="data"
+      id="id"
+      @emitDelete="doDelete"
+      @emitEdit="doEdit" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import HeaderOptions from '../components/HeaderOptions.vue'
+import { allCarts, deleteCart } from '../services/cartService'
+import { useRouter } from 'vue-router'
 import Table from '../components/Table.vue'
 const filter = ref('')
 const columns = ref([
-  { label: 'Nome', property: 'nome' },
-  { label: 'Idade', property: 'idade' },
-  { label: 'País', property: 'pais' }
+  { label: 'Código', property: 'id' },
+  { label: 'Cliente', property: 'client' },
+  { label: 'Produtos', property: 'products' }
 ])
-const data = [
-  { nome: 'João', idade: 25, pais: 'Brasil' },
-  { nome: 'Maria', idade: 30, pais: 'EUA' },
-  { nome: 'Pedro', idade: 28, pais: 'França' }
-]
+const data = ref([])
+const router = useRouter()
+onMounted(async () => {
+  const allCartsList = await allCarts()
+  mapCarts(allCartsList)
+})
+
 const onSearch = (payload) => {
   filter.value = payload
+}
+const mapCarts = (allCarts) => {
+  allCarts.forEach(cart => {
+    data.value.push({ id: cart.id, client: cart.data().client.name, products: extractProductNames(cart.data().products) })
+  })
+}
+
+const extractProductNames = (products) => {
+  return products.map(product => product.name).join(', ')
+}
+const doDelete = (cart) => {
+  deleteCart(cart.id).then(res => {
+    alert('carte removido com sucesso')
+    doFilter('id', cart.id)
+  }).catch(erro => {
+    console.error(erro)
+  })
+}
+
+const doEdit = (cart) => {
+  router.push({ path: `/update-cart/${btoa(cart.id)}` })
+}
+
+const doFilter = (key, value) => {
+  data.value = data.value.filter(client => client[key] !== value)
 }
 </script>
 

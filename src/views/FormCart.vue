@@ -15,10 +15,8 @@
           <div class="input-group">
             <label> Cliente </label>
             <div class="input-field">
-              <select v-model="client">
-                <option value="opcao1">cliente 1</option>
-                <option value="opcao2">cliente 2</option>
-                <option value="opcao3">cliente 3</option>
+              <select v-model="client" required>
+                <option v-for="client in allClientsList" :key="client.id" :value="client">{{ client.name }}</option>
               </select>
             </div>
           </div>
@@ -26,15 +24,13 @@
             <label>Produtos</label>
             <div class="input-field">
               <select v-model="productSelected" @change="updateSelect">
-                <option value="opcao1">produto 1</option>
-                <option value="opcao2">produto 2</option>
-                <option value="opcao3">produto 3</option>
+                <option v-for="product in allProductsList" :key="product.id" :value="product"> {{ product.name }}</option>
               </select>
             </div>
           </div>
           <card class="flex products-container">
-            <div class="product" v-for="product in products" :key="product">
-              <span>{{ product }}</span>
+            <div class="product" v-for="product in productsCart" :key="product">
+              <span>{{ product.name }}</span>
               <button class="btn-remove" @click="removeProduct(product)">&#10006;</button>
             </div>
           </card>
@@ -47,20 +43,67 @@
 <script setup>
 import Card from '@/components/Card.vue'
 import Form from '@/components/Form.vue'
-import { ref } from 'vue'
+import { allClients } from '../services/clientService'
+import { allProducts } from '../services/productService'
+import { findCartById, createCart, updateCart } from '../services/cartService'
+import { mapClientsToObject, mapProductsToObject } from '../composables/mapperComposables'
+import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+const route = useRouter()
+const id = ref(null)
 const client = ref(null)
 const productSelected = ref('')
-const products = ref([])
-const saveOrUpadate = () => {}
+const productsCart = ref([])
+const allProductsList = ref([])
+const allClientsList = ref([])
 
-const updateSelect = (event) => {
-  products.value.push(productSelected.value)
+onMounted(async () => {
+  const getAllProducts = await allProducts()
+  allProductsList.value = mapProductsToObject(getAllProducts)
+  const getAllClients = await allClients()
+  allClientsList.value = mapClientsToObject(getAllClients)
+
+  if (route.currentRoute.value.name === 'update-cart') {
+    const cartId = atob(route.currentRoute.value.params.id)
+    const cart = await findCartById(cartId)
+    mapCartFields(cart)
+  }
+})
+
+const saveOrUpadate = () => {
+  if (route.currentRoute.value.name === 'update-cart') {
+    updateCart(id.value, client.value, productsCart.value).then((res) => {
+      alert('Carrinho atualizado com sucesso')
+      route.push('/carts')
+    }).catch((res) => {
+      alert('erro ao atualizar carrinho')
+    })
+  } else {
+    createCart(client.value, productsCart.value).then((res) => {
+      alert('Carrinho cadastrado com sucesso')
+      route.push('/carts')
+    }).catch((res) => {
+      console.log(res)
+      alert('erro ao criar carrinho')
+    })
+  }
+}
+
+const updateSelect = () => {
+  productsCart.value.push(productSelected.value)
   productSelected.value = null
 }
 
 const removeProduct = (productRemove) => {
-  products.value = products.value.filter((p) => p !== productRemove)
+  productsCart.value = productsCart.value.filter((p) => p !== productRemove)
 }
+
+const mapCartFields = (cart) => {
+  id.value = cart.id
+  client.value = cart.data().client
+  productsCart.value = cart.data().products
+}
+
 </script>
 
 <style lang="scss">
