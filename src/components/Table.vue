@@ -11,8 +11,8 @@
         <tr v-for="row in data" :key="row[id]">
           <td v-for="col in columns" :key="col.label">{{ row[col.property] }}</td>
           <td class="t-options">
-            <button @click="doDelete(row)" class="t-btn-edit">&#9998;</button>
-            <button @click="doEdit(row)" class="t-btn-trash">&#10006;</button>
+            <button @click="doEdit(row)" class="t-btn-edit">&#9998;</button>
+            <button @click="doDelete(row)" class="t-btn-trash">&#10006;</button>
           </td>
         </tr>
       </tbody>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue'
+import { defineEmits, toRaw } from 'vue'
 const props = defineProps({
   columns: Array,
   data: Array,
@@ -30,11 +30,11 @@ const props = defineProps({
 const emit = defineEmits(['emitDelete', 'emitEdit'])
 
 const doDelete = (row) => {
-  emit('emitDelete', row)
+  emit('emitDelete', toRaw(row))
 }
 
 const doEdit = (row) => {
-  emit('emitEdit', row)
+  emit('emitEdit', toRaw(row))
 }
 </script>
 
