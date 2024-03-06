@@ -23,6 +23,7 @@ import { useRouter } from 'vue-router'
 import { allProducts, deleteProduct } from '../services/productService'
 import HeaderOptions from '../components/HeaderOptions.vue'
 import Table from '../components/Table.vue'
+import { mapProductsToObject } from '../composables/mapperComposables'
 const filter = ref('')
 const router = useRouter()
 const columns = ref([
@@ -34,14 +35,8 @@ const data = ref([])
 
 onMounted(async () => {
   const products = await allProducts()
-  mapProductsToObject(products)
+  data.value = mapProductsToObject(products)
 })
-
-const mapProductsToObject = (products) => {
-  products.forEach(product => {
-    data.value.push({ id: product.id, ...product.data() })
-  })
-}
 
 const doDelete = (product) => {
   deleteProduct(product.id).then(res => {

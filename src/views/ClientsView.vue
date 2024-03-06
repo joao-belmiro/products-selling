@@ -23,7 +23,7 @@ import { useRouter } from 'vue-router'
 import Table from '../components/Table.vue'
 import HeaderOptions from '../components/HeaderOptions.vue'
 import { allClients, deleteClient } from '../services/clientService'
-
+import { mapClientsToObject } from '../composables/mapperComposables'
 const columns = ref([
   { label: 'código', property: 'id' },
   { label: 'Nome', property: 'name' },
@@ -36,14 +36,8 @@ const data = ref([])
 const router = useRouter()
 onMounted(async () => {
   const clients = await allClients()
-  mapClientsToObject(clients)
+  data.value = mapClientsToObject(clients)
 })
-
-const mapClientsToObject = (clients) => {
-  clients.forEach(client => {
-    data.value.push({ id: client.id, ...client.data() })
-  })
-}
 
 const doDelete = (client) => {
   deleteClient(client.id).then(res => {
