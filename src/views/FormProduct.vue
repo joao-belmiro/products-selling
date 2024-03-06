@@ -31,10 +31,46 @@
 <script setup>
 import Card from '@/components/Card.vue'
 import Form from '@/components/Form.vue'
-import { ref } from 'vue'
+import { createProduct, updateProduct, findProductById } from '../services/productService'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+const id = ref(null)
 const name = ref('')
 const active = ref(true)
-const saveOrUpadate = () => {}
+const route = useRouter()
+
+onMounted(async () => {
+  if (route.currentRoute.value.name === 'update-product') {
+    const productId = atob(route.currentRoute.value.params.id)
+    const client = await findProductById(productId)
+    mapProductFields(client)
+  }
+})
+
+const saveOrUpadate = () => {
+  if (route.currentRoute.value.name === 'update-product') {
+    updateProduct(id.value, name.value, active.value).then((res) => {
+      alert('Produto atualizado com sucesso')
+      route.push('/products')
+    }).catch((res) => {
+      alert('erro ao atualizar Produto')
+    })
+  } else {
+    createProduct(name.value, active.value).then((res) => {
+      alert('Produto cadastrado com sucesso')
+      route.push('/products')
+    }).catch((res) => {
+      alert('erro ao criar Produto')
+    })
+  }
+}
+
+const mapProductFields = (product) => {
+  id.value = product.id
+  name.value = product.data().name
+  active.value = product.data().active
+}
+
 </script>
 
 <style lang="scss">
