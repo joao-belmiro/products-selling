@@ -2,7 +2,7 @@
 Este é um projeto de crud de 3 entidades, sendo elas o cliente, produto e carrinho onde cliente e produto são relacionados, utlizei um banco nosql o firebase para realizar a persistência dos dados.
 
 ## Disclaimer 
-as variaveis de ambiente estão mockadas para facilitar o avaliador, assim que forem avaliadas irei remover o projeto do firebase e criarei outro para hospedar de forma correta e segura.
+as variaveis de ambiente estão mockadas para facilitar o avaliador, assim que obtiver um retorno irei remover o projeto do firebase e criarei outro para hospedar de forma correta e segura.
 
 ## Instalação das dependências
 
@@ -15,7 +15,9 @@ Finalizada a instalação do Node.js podemos prosseguir com a instalação das d
 
 [Instalação Yarn windows ](https://classic.yarnpkg.com/en/docs/install#windows-stable)
 
-## 1- Instalação das dependências
+
+Para realizar o setup local do projeto siga os passos **1** e **2** e o projeto aparecerá disponivel na url [localhost:8080](http://localhost:8080) caso esta porta esteja disponível
+### 1- Instalação das dependências
 ```
 npm install
 ```
@@ -23,7 +25,7 @@ npm install
 ```
 yarn install
 ```
-## 2- Compilar e subir o servidor local
+### 2- Compilar e subir o servidor local
 ```
 npm run serve
 ```
@@ -32,8 +34,8 @@ npm run serve
 yarn serve
 ```
 
-## Build da aplicação
-Ao realizar o build da aplicação podemos fazer o deploy em alguma plataforma apenas copiando a pasta /dist
+### Build da aplicação
+Ao realizar o build da aplicação podemos fazer o deploy em alguma plataforma apenas copiando a pasta /dist, ou crie um fork do projeto e faça as alterações desejadas 
 ```
 npm run build
 ```
