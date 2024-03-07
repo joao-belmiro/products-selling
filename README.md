@@ -2,7 +2,8 @@
 Este é um projeto de crud de 3 entidades, sendo elas o cliente, produto e carrinho onde cliente e produto são relacionados, utlizei um banco nosql o firebase para realizar a persistência dos dados.
 
 ## Disclaimer 
-as variaveis de ambiente estão mockadas para facilitar o avaliador, assim que obtiver um retorno irei remover o projeto do firebase e criarei outro para hospedar de forma correta e segura.
+* Não há validações complexas nos formulários
+* as variaveis de ambiente estão mockadas para facilitar o avaliador, assim que obtiver um retorno irei remover o projeto do firebase e criarei outro para hospedar de forma correta e segura.
 
 ## Instalação das dependências
 
