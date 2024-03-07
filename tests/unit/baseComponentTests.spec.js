@@ -1,18 +1,18 @@
 import { mount } from '@vue/test-utils'
 import HeaderOptions from '@/components/HeaderOptions.vue'
 import Table from '@/components/Table.vue'
+import Form from '@/components/Form.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: '/clients', name: 'clients' },
+    { path: '/new-client', name: 'new-client' }
+  ]
+})
 
 describe('Teste das funcionalidades e props para HeaderOptions', () => {
   it('Verificar se as props e rotas estão sendo passadas corretamente', () => {
-    const router = createRouter({
-      history: createWebHistory(),
-      routes: [
-        { path: '/clients', name: 'clients' },
-        { path: '/new-client', name: 'new-client' }
-      ]
-    })
-
     const routerBack = '/clients'
     const routerAdd = '/new-client'
     const textBack = 'voltar'
@@ -96,6 +96,9 @@ describe('Testes do componente Table', () => {
 
   it('verificar a emissão dos eventos', async () => {
     const wrapper = mount(Table, {
+      global: {
+        plugins: [router]
+      },
       props: {
         columns,
         data,
@@ -108,8 +111,26 @@ describe('Testes do componente Table', () => {
 
     await btnEdit.trigger('click')
     await btnDelete.trigger('click')
-    
+
     expect(wrapper.emitted('emitEdit')).toBeTruthy()
     expect(wrapper.emitted('emitDelete')).toBeTruthy()
+  })
+
+  it('Verificar se as props do componente form estão corretas', async () => {
+    const props = {
+      textSubmit: 'Salvar',
+      textCancel: 'cancelar',
+      routeBack: '/clients'
+    }
+
+    const wrapper = mount(Form, {
+      props: props
+    })
+
+    const btnSubmit = wrapper.find('.btn-submit')
+    const btnCancel = wrapper.find('.btn-cancel')
+    expect(btnSubmit.text()).toBe('Salvar')
+    expect(btnCancel.text()).toBe('cancelar')
+    expect(btnCancel.element.getAttribute('to')).toBe('/clients')
   })
 })

@@ -22,8 +22,8 @@ describe('FormProduct', () => {
     const wrapper = mount(FormProduct, {
       global: {
         plugins: [router]
-      },
-      
+      }
+
     })
     await wrapper.find('#product-name').setValue('Arroz')
     await wrapper.find('#product-active').setValue(true)
@@ -31,5 +31,4 @@ describe('FormProduct', () => {
     expect(wrapper.vm.name).toBe('Arroz')
     expect(wrapper.vm.active).toBe(true)
   })
-
 })
