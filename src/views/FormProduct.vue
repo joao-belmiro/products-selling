@@ -15,12 +15,12 @@
           <div class="input-group">
             <label> Nome </label>
             <div class="input-field">
-              <input v-model="name" type="text" required />
+              <input id="product-name" v-model="name" type="text" required />
             </div>
           </div>
           <div class="input-group">
             <label> {{ active ? 'Ativo' : 'Inativo' }} </label>
-            <input v-model="active" type="checkbox" />
+            <input id="product-active" v-model="active" type="checkbox" />
           </div>
         </div>
       </Form>

@@ -23,7 +23,6 @@ import HeaderOptions from '../components/HeaderOptions.vue'
 import { allCarts, deleteCart } from '../services/cartService'
 import { useRouter } from 'vue-router'
 import Table from '../components/Table.vue'
-const filter = ref('')
 const columns = ref([
   { label: 'Código', property: 'id' },
   { label: 'Cliente', property: 'client' },
@@ -37,7 +36,7 @@ onMounted(async () => {
 })
 
 const onSearch = (payload) => {
-  filter.value = payload
+  data.value = data.value.filter(cart => cart.client.indexOf(payload) !== -1)
 }
 const mapCarts = (allCarts) => {
   allCarts.forEach(cart => {
@@ -61,8 +60,8 @@ const doEdit = (cart) => {
   router.push({ path: `/update-cart/${btoa(cart.id)}` })
 }
 
-const doFilter = (key, value) => {
-  data.value = data.value.filter(client => client[key] !== value)
+const doFilter = (value) => {
+  data.value = data.value.filter(client => client.name.indexOf(value) !== -1)
 }
 </script>
 
